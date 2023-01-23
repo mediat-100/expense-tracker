@@ -1,4 +1,5 @@
 using expense_tracker.Data;
+using expense_tracker.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
 });
+
+builder.Services.AddScoped<IExpense, ExpenseRepository>();
 
 var app = builder.Build();
 
