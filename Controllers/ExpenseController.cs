@@ -40,6 +40,12 @@ namespace expense_tracker.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateExpense([FromBody]Expense expense)
         {
+            if ((int) expense.Category > 2)
+            {
+                ModelState.AddModelError(nameof(expense.Category), "Invalid category");
+                return BadRequest(ModelState);
+            }
+            
             var newExpense = await _expenseRepository.CreateExpense(expense);
 
             return Ok(newExpense);
@@ -49,6 +55,12 @@ namespace expense_tracker.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> UpdateExpenseById(Guid id, Expense expense)
         {
+            if ((int) expense.Category > 2)
+            {
+                ModelState.AddModelError(nameof(expense.Category), "Invalid category");
+                return BadRequest(ModelState);
+            }
+
             var updateExpense = await _expenseRepository.UpdateExpense(id, expense);
 
             if (updateExpense == null) return NotFound("Expense id not found");
