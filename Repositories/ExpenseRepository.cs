@@ -1,5 +1,6 @@
 ﻿using expense_tracker.Data;
 using expense_tracker.Model.Domain;
+using expense_tracker.Model.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace expense_tracker.Repositories
@@ -24,28 +25,53 @@ namespace expense_tracker.Repositories
             return existingExpense == null ? null : existingExpense;
         }
 
-        public async Task<Expense> CreateExpense(Expense expense)
+        public async Task<ExpenseDTO> CreateExpense(CreateExpenseDTO request)
         {
-            expense.Id = new Guid();
-            await _dbContext.Expenses.AddAsync(expense);
+            var newExpense = new Expense()
+            {
+                Id = new Guid(),
+                ExpenseDate = request.ExpenseDate,
+                Amount = request.Amount,
+                Category = request.Category,
+                MerchantName = request.MerchantName,
+            };
+
+            await _dbContext.Expenses.AddAsync(newExpense);
             await _dbContext.SaveChangesAsync();
+
+            // convert to DTO
+            var newExpenseDTO = new ExpenseDTO()
+            {
+                ExpenseDate = newExpense.ExpenseDate,
+                Amount = newExpense.Amount,
+                MerchantName = newExpense.MerchantName,
+                Category = newExpense.Category
+            };
            
-            return expense;
+            return newExpenseDTO;
         }
 
-        public async Task<Expense> UpdateExpense(Guid id, Expense expense)
+        public async Task<ExpenseDTO> UpdateExpense(Guid id, UpdateExpenseDTO request)
         {
             var existingExpense = await _dbContext.Expenses.FirstOrDefaultAsync(x => x.Id == id);
 
             if (existingExpense == null) return null;
 
-            existingExpense.Category = expense.Category;
-            existingExpense.MerchantName = expense.MerchantName;
-            existingExpense.Amount = expense.Amount;
+            existingExpense.Category = request.Category;
+            existingExpense.Amount = request.Amount;
 
             await _dbContext.SaveChangesAsync();
 
-            return existingExpense;
+            // convert to DTO
+            var existingExpenseDTO = new ExpenseDTO()
+            {
+                ExpenseDate = existingExpense.ExpenseDate,
+                Amount = existingExpense.Amount,
+                MerchantName = existingExpense.MerchantName,
+                Category = existingExpense.Category
+            };
+
+            return existingExpenseDTO;
         }
 
         public async Task<Expense> DeleteExpense(Guid id)

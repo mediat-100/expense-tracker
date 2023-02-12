@@ -1,4 +1,5 @@
 ﻿using expense_tracker.Model.Domain;
+using expense_tracker.Model.DTO;
 
 namespace expense_tracker.Repositories
 {
@@ -6,8 +7,8 @@ namespace expense_tracker.Repositories
     {
         Task<IEnumerable<Expense>> GetAllExpenses();
         Task<Expense> GetExpense(Guid id);
-        Task<Expense> CreateExpense(Expense expense);
-        Task<Expense> UpdateExpense(Guid id, Expense expense);
+        Task<ExpenseDTO> CreateExpense(CreateExpenseDTO expense);
+        Task<ExpenseDTO> UpdateExpense(Guid id, UpdateExpenseDTO expense);
         Task<Expense> DeleteExpense(Guid id);
     }
 }

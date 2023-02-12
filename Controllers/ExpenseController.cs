@@ -1,6 +1,4 @@
-﻿using expense_tracker.Data;
-using expense_tracker.Model;
-using expense_tracker.Model.Domain;
+﻿using expense_tracker.Model.DTO;
 using expense_tracker.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,30 +36,30 @@ namespace expense_tracker.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateExpense([FromBody]Expense expense)
+        public async Task<IActionResult> CreateExpense([FromBody]CreateExpenseDTO request)
         {
-            if ((int) expense.Category > 2)
+            if ((int) request.Category > 2)
             {
-                ModelState.AddModelError(nameof(expense.Category), "Invalid category");
+                ModelState.AddModelError(nameof(request.Category), "Invalid category");
                 return BadRequest(ModelState);
             }
             
-            var newExpense = await _expenseRepository.CreateExpense(expense);
+            var newExpense = await _expenseRepository.CreateExpense(request);
 
             return Ok(newExpense);
         }
 
         [HttpPut]
         [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateExpenseById(Guid id, Expense expense)
+        public async Task<IActionResult> UpdateExpenseById(Guid id, UpdateExpenseDTO request)
         {
-            if ((int) expense.Category > 2)
+            if ((int) request.Category > 2)
             {
-                ModelState.AddModelError(nameof(expense.Category), "Invalid category");
+                ModelState.AddModelError(nameof(request.Category), "Invalid category");
                 return BadRequest(ModelState);
             }
 
-            var updateExpense = await _expenseRepository.UpdateExpense(id, expense);
+            var updateExpense = await _expenseRepository.UpdateExpense(id, request);
 
             if (updateExpense == null) return NotFound("Expense id not found");
 
