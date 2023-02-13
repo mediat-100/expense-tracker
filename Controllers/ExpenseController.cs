@@ -25,7 +25,7 @@ namespace expense_tracker.Controllers
         }
 
         [HttpGet]
-        [Route("{id:guid}")]
+        //[Route("{id:guid}")]
         public async Task<IActionResult> GetExpenseById(Guid id)
         {
             var existingExpense = await _expenseRepository.GetExpense(id);
