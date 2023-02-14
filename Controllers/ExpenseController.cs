@@ -87,7 +87,7 @@ namespace expense_tracker.Controllers
 
         [HttpGet]
         [Route("total-expenses/category")]
-        public async Task<string> TotalExpensesByCategory(Classification category)
+        public async Task<string> TotalExpensesByCategory(Category category)
         {
             return await _expenseRepository.TotalExpensesByCategory(category);
         }
