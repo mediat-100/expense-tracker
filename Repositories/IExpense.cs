@@ -12,6 +12,6 @@ namespace expense_tracker.Repositories
         Task<ExpenseDTO> UpdateExpense(Guid id, UpdateExpenseDTO expense);
         Task<Expense> DeleteExpense(Guid id);
         Task<string> TotalExpense();
-        Task<string> TotalExpensesByCategory(Classification classification);
+        Task<string> TotalExpensesByCategory(Category category);
     }
 }

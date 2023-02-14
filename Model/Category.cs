@@ -1,8 +1,8 @@
 ﻿namespace expense_tracker.Model
 {
-    public enum Classification
+    public enum Category
     {
-        Personal,
+        Personal = 1,
         Business,
         Social
     }

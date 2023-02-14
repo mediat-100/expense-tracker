@@ -3,6 +3,6 @@
     public class UpdateExpenseDTO
     {
         public int Amount { get; set; }
-        public Classification Category { get; set; }
+        public Category Category { get; set; }
     }
 }
