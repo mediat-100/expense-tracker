@@ -1,4 +1,5 @@
-﻿using expense_tracker.Model.Domain;
+﻿using expense_tracker.Model;
+using expense_tracker.Model.Domain;
 using expense_tracker.Model.DTO;
 
 namespace expense_tracker.Repositories
@@ -10,5 +11,7 @@ namespace expense_tracker.Repositories
         Task<ExpenseDTO> CreateExpense(CreateExpenseDTO expense);
         Task<ExpenseDTO> UpdateExpense(Guid id, UpdateExpenseDTO expense);
         Task<Expense> DeleteExpense(Guid id);
+        Task<string> TotalExpense();
+        Task<string> TotalExpensesByCategory(Classification classification);
     }
 }

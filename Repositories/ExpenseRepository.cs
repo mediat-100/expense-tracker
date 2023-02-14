@@ -1,4 +1,5 @@
 ﻿using expense_tracker.Data;
+using expense_tracker.Model;
 using expense_tracker.Model.Domain;
 using expense_tracker.Model.DTO;
 using Microsoft.EntityFrameworkCore;
@@ -86,5 +87,44 @@ namespace expense_tracker.Repositories
             return existingExpense;
         }
 
+        public async Task<string> TotalExpense()
+        {
+            var expenses = await _dbContext.Expenses.ToListAsync();
+
+            if (expenses is null)
+                return "No expense found";
+
+            var totalExpense = expenses.Sum(x => x.Amount);
+
+            return $"Your total expenses is {totalExpense}";
+        }
+
+        public async Task<string> TotalExpensesByCategory(Classification category)
+        {
+            string categoryExpenses;
+            var expenses = await _dbContext.Expenses.ToListAsync();
+
+            switch((int) category)
+            {
+                case 0:
+                    var personalExpenses = expenses.FindAll(x => x.Category == 0).Sum(x => x.Amount);
+                    categoryExpenses = $"Your total {Classification.Personal} expenses is {personalExpenses}";
+                    break;
+                case 1:
+                    var businessExpenses = expenses.FindAll(x => (int) x.Category == 1).Sum(x => x.Amount);
+                    categoryExpenses = $"Your total {Classification.Business} expenses is {businessExpenses}";
+                    break;
+                case 2:
+                    var socialExpenses = expenses.FindAll(x => (int) x.Category == 2).Sum(x => x.Amount);
+                    categoryExpenses = $"Your total {Classification.Social} is {socialExpenses}";
+                    break;
+                default:
+                    var totalExpenses = expenses.Sum(x => x.Amount);
+                    categoryExpenses = $"Your total expenses is {totalExpenses}";
+                    break;
+            }
+
+            return categoryExpenses;
+        }
     }
 }

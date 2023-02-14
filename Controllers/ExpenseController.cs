@@ -1,4 +1,5 @@
-﻿using expense_tracker.Model.DTO;
+﻿using expense_tracker.Model;
+using expense_tracker.Model.DTO;
 using expense_tracker.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,9 +20,9 @@ namespace expense_tracker.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllExpensesInDb()
         {
-           var expenses = await _expenseRepository.GetAllExpenses();
+            var expenses = await _expenseRepository.GetAllExpenses();
 
-           return Ok(expenses);
+            return Ok(expenses);
         }
 
         [HttpGet]
@@ -36,14 +37,14 @@ namespace expense_tracker.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateExpense([FromBody]CreateExpenseDTO request)
+        public async Task<IActionResult> CreateExpense([FromBody] CreateExpenseDTO request)
         {
-            if ((int) request.Category > 2)
+            if ((int)request.Category > 2)
             {
                 ModelState.AddModelError(nameof(request.Category), "Invalid category");
                 return BadRequest(ModelState);
             }
-            
+
             var newExpense = await _expenseRepository.CreateExpense(request);
 
             return Ok(newExpense);
@@ -53,7 +54,7 @@ namespace expense_tracker.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> UpdateExpenseById(Guid id, UpdateExpenseDTO request)
         {
-            if ((int) request.Category > 2)
+            if ((int)request.Category > 2)
             {
                 ModelState.AddModelError(nameof(request.Category), "Invalid category");
                 return BadRequest(ModelState);
@@ -75,6 +76,20 @@ namespace expense_tracker.Controllers
             if (deleteExpense == null) return NotFound("Expense id not found");
 
             return Ok(deleteExpense);
+        }
+
+        [HttpGet]
+        [Route("total-expenses")]
+        public async Task<string> TotalExpenses()
+        {
+            return await _expenseRepository.TotalExpense();
+        }
+
+        [HttpGet]
+        [Route("total-expenses/category")]
+        public async Task<string> TotalExpensesByCategory(Classification category)
+        {
+            return await _expenseRepository.TotalExpensesByCategory(category);
         }
     }
 }
