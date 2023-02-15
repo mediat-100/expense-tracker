@@ -1,4 +1,5 @@
-﻿using expense_tracker.Data;
+﻿using System.Collections.Immutable;
+using expense_tracker.Data;
 using expense_tracker.Model;
 using expense_tracker.Model.Domain;
 using expense_tracker.Model.DTO;
@@ -125,6 +126,20 @@ namespace expense_tracker.Repositories
             }
 
             return categoryExpenses;
+        }
+
+        public IEnumerable<object> MonthlyExpenses()
+        {
+            var monthlyExpense = _dbContext.Expenses.AsEnumerable()
+                .GroupBy(x => new { Month = x.ExpenseDate.ToString("MMMM"), x.ExpenseDate.Year },
+                (key, group) => new
+                {
+                    year = key.Year,
+                    month = key.Month,
+                    expense = group.Sum(y => y.Amount)
+                });
+
+            return monthlyExpense;
         }
     }
 }

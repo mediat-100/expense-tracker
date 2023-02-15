@@ -91,5 +91,12 @@ namespace expense_tracker.Controllers
         {
             return await _expenseRepository.TotalExpensesByCategory(category);
         }
+
+        [HttpGet]
+        [Route("monthly-expenses")]
+        public IEnumerable<object> MonthlyExpense()
+        {
+            return  _expenseRepository.MonthlyExpenses();
+        }
     }
 }
