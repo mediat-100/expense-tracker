@@ -13,5 +13,6 @@ namespace expense_tracker.Repositories
         Task<Expense> DeleteExpense(Guid id);
         Task<string> TotalExpense();
         Task<string> TotalExpensesByCategory(Category category);
+        IEnumerable<object> MonthlyExpenses();
     }
 }
