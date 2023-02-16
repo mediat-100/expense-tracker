@@ -100,7 +100,7 @@ namespace expense_tracker.Controllers
         }
 
         [HttpGet]
-        [Route("weekly-expenses")]
+        [Route("daily-expenses")]
         public IEnumerable<object> DailyExpense()
         {
             return _expenseRepository.DailyExpenses();
