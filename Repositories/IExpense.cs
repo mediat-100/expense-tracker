@@ -14,5 +14,6 @@ namespace expense_tracker.Repositories
         Task<string> TotalExpense();
         Task<string> TotalExpensesByCategory(Category category);
         IEnumerable<object> MonthlyExpenses();
+        IEnumerable<object> DailyExpenses();
     }
 }
