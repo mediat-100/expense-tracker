@@ -141,5 +141,33 @@ namespace expense_tracker.Repositories
 
             return monthlyExpense;
         }
+
+        public IEnumerable<object> DailyExpenses()
+        {
+            var dailyExpense = _dbContext.Expenses.AsEnumerable()
+                .GroupBy(i => new { day = i.ExpenseDate.DayOfWeek } , 
+                (key, group) => new
+                {
+                    day = key.day.ToString(),
+                    expense = group.Sum(x => x.Amount)
+                }
+                );
+
+            return dailyExpense;
+        }
+    }
+
+    public static class DateTimeExtensions
+    {
+        public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
+        {
+            int diff = dt.DayOfWeek - startOfWeek;
+            if (diff < 0)
+            {
+                diff += 7;
+            }
+            var dateAdded = dt.AddDays(-1 * diff).Date;
+            return dateAdded;
+        }
     }
 }

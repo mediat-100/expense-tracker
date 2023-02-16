@@ -98,5 +98,13 @@ namespace expense_tracker.Controllers
         {
             return  _expenseRepository.MonthlyExpenses();
         }
+
+        [HttpGet]
+        [Route("weekly-expenses")]
+        public IEnumerable<object> DailyExpense()
+        {
+            return _expenseRepository.DailyExpenses();
+        }
+
     }
 }
