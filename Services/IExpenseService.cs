@@ -4,7 +4,7 @@ using expense_tracker.Model.DTO;
 
 namespace expense_tracker.Repositories
 {
-    public interface IExpense
+    public interface IExpenseService
     {
         Task<IEnumerable<Expense>> GetAllExpenses();
         Task<Expense?> GetExpense(Guid id);

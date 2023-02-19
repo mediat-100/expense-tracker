@@ -9,9 +9,9 @@ namespace expense_tracker.Controllers
     [Route("[controller]")]
     public class ExpenseController : Controller
     {
-        private readonly IExpense _expenseRepository;
+        private readonly IExpenseService _expenseRepository;
 
-        public ExpenseController(IExpense expenseRepository)
+        public ExpenseController(IExpenseService expenseRepository)
         {
             _expenseRepository = expenseRepository;
         }
