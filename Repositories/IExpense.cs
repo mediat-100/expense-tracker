@@ -7,7 +7,7 @@ namespace expense_tracker.Repositories
     public interface IExpense
     {
         Task<IEnumerable<Expense>> GetAllExpenses();
-        Task<Expense> GetExpense(Guid id);
+        Task<Expense?> GetExpense(Guid id);
         Task<ExpenseDTO> CreateExpense(CreateExpenseDTO expense);
         Task<ExpenseDTO> UpdateExpense(Guid id, UpdateExpenseDTO expense);
         Task<Expense> DeleteExpense(Guid id);
@@ -15,5 +15,6 @@ namespace expense_tracker.Repositories
         Task<string> TotalExpensesByCategory(Category category);
         IEnumerable<object> MonthlyExpenses();
         IEnumerable<object> DailyExpenses();
+        IEnumerable<object> WeeklyExpenses();
     }
 }

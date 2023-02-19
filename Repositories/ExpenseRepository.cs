@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using expense_tracker.Data;
+﻿using expense_tracker.Data;
 using expense_tracker.Model;
 using expense_tracker.Model.Domain;
 using expense_tracker.Model.DTO;
@@ -20,11 +19,11 @@ namespace expense_tracker.Repositories
             return await _dbContext.Expenses.ToListAsync();
         }
 
-        public async Task<Expense> GetExpense(Guid id)
+        public async Task<Expense?> GetExpense(Guid id)
         {
             var existingExpense = await _dbContext.Expenses.FirstOrDefaultAsync(x => x.Id == id);
 
-            return existingExpense == null ? null : existingExpense;
+            return existingExpense ?? null;
         }
 
         public async Task<ExpenseDTO> CreateExpense(CreateExpenseDTO request)
@@ -117,7 +116,7 @@ namespace expense_tracker.Repositories
                     break;
                 case 3:
                     var socialExpenses = expenses.FindAll(x => (int) x.Category == 2).Sum(x => x.Amount);
-                    categoryExpenses = $"Your total {Category.Social} is {socialExpenses}";
+                    categoryExpenses = $"Your total {Category.Social} expenses is {socialExpenses}";
                     break;
                 default:
                     var totalExpenses = expenses.Sum(x => x.Amount);
@@ -136,7 +135,7 @@ namespace expense_tracker.Repositories
                 {
                     year = key.Year,
                     month = key.Month,
-                    expense = group.Sum(y => y.Amount)
+                    totalExpense = group.Sum(y => y.Amount)
                 });
 
             return monthlyExpense;
@@ -145,15 +144,33 @@ namespace expense_tracker.Repositories
         public IEnumerable<object> DailyExpenses()
         {
             var dailyExpense = _dbContext.Expenses.AsEnumerable()
-                .GroupBy(i => new { day = i.ExpenseDate.DayOfWeek } , 
+                .OrderBy(x => x.ExpenseDate)
+                .GroupBy(i => new { day = i.ExpenseDate.DayOfWeek, date = i.ExpenseDate.Date } ,
                 (key, group) => new
                 {
                     day = key.day.ToString(),
-                    expense = group.Sum(x => x.Amount)
+                    key.date,
+                    totalExpense = group.Sum(x => x.Amount)
                 }
                 );
 
             return dailyExpense;
+        }
+
+        public IEnumerable<object> WeeklyExpenses()
+        {
+            var weeklyExpense = _dbContext.Expenses.AsEnumerable()
+               .OrderBy(x => x.ExpenseDate)
+               .GroupBy(j => j.ExpenseDate.StartOfWeek(DayOfWeek.Monday),
+               (key, group) => new
+               {
+                   startWeekDate = key.ToString("MM / dd / yyyy"),
+                   endWeekDate = key.AddDays(7).ToString("MM / dd / yyyy"),
+                   totalExpense = group.Sum(y => y.Amount)
+               }
+               );
+
+            return weeklyExpense;
         }
     }
 
