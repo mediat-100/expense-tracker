@@ -54,7 +54,7 @@ namespace expense_tracker.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> UpdateExpenseById(Guid id, UpdateExpenseDTO request)
         {
-            if ((int)request.Category > 2)
+            if ((int)request.Category <= 0  || (int)request.Category > 3)
             {
                 ModelState.AddModelError(nameof(request.Category), "Invalid category");
                 return BadRequest(ModelState);
@@ -104,6 +104,13 @@ namespace expense_tracker.Controllers
         public IEnumerable<object> DailyExpense()
         {
             return _expenseRepository.DailyExpenses();
+        }
+
+        [HttpGet]
+        [Route("weekly-expenses")]
+        public IEnumerable<object> WeeklyExpense()
+        {
+            return _expenseRepository.WeeklyExpenses();
         }
 
     }
