@@ -2,6 +2,7 @@
 using expense_tracker.Model;
 using expense_tracker.Model.Domain;
 using expense_tracker.Model.DTO;
+using expense_tracker.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace expense_tracker.Repositories
@@ -171,20 +172,6 @@ namespace expense_tracker.Repositories
                );
 
             return weeklyExpense;
-        }
-    }
-
-    public static class DateTimeExtensions
-    {
-        public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
-        {
-            int diff = dt.DayOfWeek - startOfWeek;
-            if (diff < 0)
-            {
-                diff += 7;
-            }
-            var dateAdded = dt.AddDays(-1 * diff).Date;
-            return dateAdded;
         }
     }
 }
